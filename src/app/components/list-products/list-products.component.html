@@ -1,0 +1,57 @@
+<div class="container mt-3">
+  <app-product *ngIf="showForm" [isEditing]="isEditingProduct" [categories]="categories" [product]="product" (cancelEmitt)="cancelNewproductForm()" (salvarEmitt)="saveProduct()" (editEmitt)="sendEditProductService()"></app-product>
+  <div *ngIf="!showForm">
+    <button class="btn btn-primary" (click)="showCreateForm()">Novo</button>
+    <div class="display-6">Produtos Cadastrados</div>
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <table class="table" id="productsTable">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Preço</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">Opções</th>
+              <th scope="col " class="text-end">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of listProducts">
+              <td>{{product.id}}</td>
+              <td>{{product.name}}</td>
+              <td>{{product.description}}</td>
+              <td>{{product.price | currency: 'BRL'}}</td>
+              <td>{{product.category.name}}</td>
+              <td>
+                <span class="badge bg-success text-white me-1" *ngIf="product.promotion">P</span>
+                <span class="badge bg-primary text-white " *ngIf="product.newProduct">L</span>
+              </td>
+              <td class="text-end">
+                <button class="btn p-1" (click)="editProduct(product)"><i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn p-1" (click)="deleteProduct(confirmModal, product)"><i class="bi bi-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #confirmModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Remover Produto</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+    </div>
+    <div class="modal-body">
+      <p>Deseja remover o produto?</p>
+      <p>Produto: {{productToDelete.name}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="modal.close(true)">Confirmar</button>
+      <button type="button" class="btn btn-primary" (click)="modal.close()">cancelar</button>
+    </div>
+  </ng-template>
+</div>
